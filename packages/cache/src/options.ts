@@ -1,9 +1,24 @@
 import * as core from '@actions/core'
 
+export interface LocalCacheOptions {
+  /**
+   * Use cache which is saved at self-hosted runner
+   * 
+   * @default false
+   */
+  useLocalCache?: boolean
+  /**
+   * Cache base directory of self-hosted runner
+   * 
+   * @default undefined
+   */
+  localCacheDirectoryBasePath?: string
+}
+
 /**
  * Options to control cache upload
  */
-export interface UploadOptions {
+export interface UploadOptions extends LocalCacheOptions {
   /**
    * Number of parallel cache upload
    *
@@ -21,7 +36,7 @@ export interface UploadOptions {
 /**
  * Options to control cache download
  */
-export interface DownloadOptions {
+export interface DownloadOptions extends LocalCacheOptions {
   /**
    * Indicates whether to use the Azure Blob SDK to download caches
    * that are stored on Azure Blob Storage to improve reliability and
@@ -78,7 +93,8 @@ export interface DownloadOptions {
 export function getUploadOptions(copy?: UploadOptions): UploadOptions {
   const result: UploadOptions = {
     uploadConcurrency: 4,
-    uploadChunkSize: 32 * 1024 * 1024
+    uploadChunkSize: 32 * 1024 * 1024,
+    useLocalCache: false
   }
 
   if (copy) {
@@ -109,7 +125,8 @@ export function getDownloadOptions(copy?: DownloadOptions): DownloadOptions {
     downloadConcurrency: 8,
     timeoutInMs: 30000,
     segmentTimeoutInMs: 600000,
-    lookupOnly: false
+    lookupOnly: false,
+    useLocalCache: false
   }
 
   if (copy) {
