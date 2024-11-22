@@ -8,14 +8,6 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "baseUrl": "./",
-    "paths": {
-      "@actions/core": [
-        "packages/core"
-      ],
-      "@actions/http-client": [
-        "packages/http-client"
-      ],
-    },
     "useUnknownInCatchVariables": false
   },
   "exclude": [
