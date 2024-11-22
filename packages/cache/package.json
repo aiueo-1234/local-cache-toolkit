@@ -1,6 +1,6 @@
 {
-  "name": "@actions/cache",
-  "version": "3.3.0",
+  "name": "local-cache-toolkit",
+  "version": "0.0.0",
   "preview": true,
   "description": "Actions cache lib",
   "keywords": [
@@ -8,7 +8,7 @@
     "actions",
     "cache"
   ],
-  "homepage": "https://github.com/actions/toolkit/tree/main/packages/cache",
+  "homepage": "https://github.com/aiueo-1234/local-cache-toolkit/tree/main/packages/cache",
   "license": "MIT",
   "main": "lib/cache.js",
   "types": "lib/cache.d.ts",
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/toolkit.git",
+    "url": "git+https://github.com/aiueo-1234/local-cache-toolkit.git",
     "directory": "packages/cache"
   },
   "scripts": {
@@ -34,7 +34,7 @@
     "tsc": "tsc"
   },
   "bugs": {
-    "url": "https://github.com/actions/toolkit/issues"
+    "url": "https://github.com/aiueo-1234/local-cache-toolkit/issues"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
