@@ -3,13 +3,13 @@ import * as core from '@actions/core'
 export interface LocalCacheOptions {
   /**
    * Use cache which is saved at self-hosted runner
-   * 
+   *
    * @default false
    */
   useLocalCache?: boolean
   /**
    * Cache base directory of self-hosted runner
-   * 
+   *
    * @default undefined
    */
   localCacheDirectoryBasePath?: string
@@ -105,6 +105,14 @@ export function getUploadOptions(copy?: UploadOptions): UploadOptions {
     if (typeof copy.uploadChunkSize === 'number') {
       result.uploadChunkSize = copy.uploadChunkSize
     }
+
+    if (typeof copy.useLocalCache == 'boolean') {
+      result.useLocalCache = copy.useLocalCache
+    }
+
+    if (typeof copy.localCacheDirectoryBasePath === 'string') {
+      result.localCacheDirectoryBasePath = copy.localCacheDirectoryBasePath
+    }
   }
 
   core.debug(`Upload concurrency: ${result.uploadConcurrency}`)
@@ -152,6 +160,14 @@ export function getDownloadOptions(copy?: DownloadOptions): DownloadOptions {
 
     if (typeof copy.lookupOnly === 'boolean') {
       result.lookupOnly = copy.lookupOnly
+    }
+
+    if (typeof copy.useLocalCache == 'boolean') {
+      result.useLocalCache = copy.useLocalCache
+    }
+
+    if (typeof copy.localCacheDirectoryBasePath === 'string') {
+      result.localCacheDirectoryBasePath = copy.localCacheDirectoryBasePath
     }
   }
   const segmentDownloadTimeoutMins =
