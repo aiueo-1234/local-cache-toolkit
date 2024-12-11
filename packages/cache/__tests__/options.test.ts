@@ -71,7 +71,8 @@ test('env variables override all getUploadOptions settings', async () => {
   const expectedOptions: UploadOptions = {
     uploadConcurrency: 16,
     uploadChunkSize: 64 * 1024 * 1024,
-    useAzureSdk: true
+    useAzureSdk: true,
+    useLocalCache: false
   }
 
   process.env.CACHE_UPLOAD_CONCURRENCY = '16'
@@ -85,7 +86,8 @@ test('env variables override all getUploadOptions settings but do not exceed cap
   const expectedOptions: UploadOptions = {
     uploadConcurrency: 32,
     uploadChunkSize: 128 * 1024 * 1024,
-    useAzureSdk: true
+    useAzureSdk: true,
+    useLocalCache: false
   }
 
   process.env.CACHE_UPLOAD_CONCURRENCY = '64'
