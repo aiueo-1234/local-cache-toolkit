@@ -1,10 +1,12 @@
 import * as core from '@actions/core'
+import * as io from '@actions/io'
+import * as ioUtil from '@actions/io/lib/io-util'
 import * as path from 'path'
 import * as utils from './internal/cacheUtils'
 import * as cacheHttpClient from './internal/cacheHttpClient'
 import * as cacheTwirpClient from './internal/shared/cacheTwirpClient'
 import {getCacheServiceVersion, isGhes} from './internal/config'
-import {DownloadOptions, UploadOptions} from './options'
+import {DownloadOptions, LocalCacheOptions, UploadOptions} from './options'
 import {createTar, extractTar, listTar} from './internal/tar'
 import {
   CreateCacheEntryRequest,
@@ -47,6 +49,25 @@ function checkKey(key: string): void {
   if (!regex.test(key)) {
     throw new ValidationError(
       `Key Validation Error: ${key} cannot contain commas.`
+    )
+  }
+}
+
+function checkLocalCacheDirectoryBasePath(options?: LocalCacheOptions): void {
+  if (!options?.useLocalCache) {
+    return
+  }
+  if (
+    options.localCacheDirectoryBasePath === '' ||
+    options.localCacheDirectoryBasePath === undefined
+  ) {
+    throw new ValidationError(
+      `localCacheDirectoryBasePath is empty. If you want to save cache to local machine, you must set this option.`
+    )
+  }
+  if (!ioUtil.isRooted(options.localCacheDirectoryBasePath)) {
+    throw new ValidationError(
+      'localCacheDirectoryBasePath must be absolute path.'
     )
   }
 }
@@ -335,6 +356,7 @@ export async function saveCache(
   core.debug(`Cache service version: ${cacheServiceVersion}`)
   checkPaths(paths)
   checkKey(key)
+  checkLocalCacheDirectoryBasePath(options)
   switch (cacheServiceVersion) {
     case 'v2':
       return await saveCacheV2(paths, key, options, enableCrossOsArchive)
@@ -388,6 +410,13 @@ async function saveCacheV1(
     const fileSizeLimit = 10 * 1024 * 1024 * 1024 // 10GB per repo limit
     const archiveFileSize = utils.getArchiveFileSizeInBytes(archivePath)
     core.debug(`File Size: ${archiveFileSize}`)
+
+    // check useLocalCache
+    if (options?.useLocalCache === true) {
+      await saveCacheLocal(archivePath, options)
+      cacheId = 0
+      return cacheId
+    }
 
     // For GHES, this check will take place in ReserveCache API with enterprise file size limit
     if (archiveFileSize > fileSizeLimit && !isGhes()) {
@@ -502,6 +531,13 @@ async function saveCacheV2(
     const archiveFileSize = utils.getArchiveFileSizeInBytes(archivePath)
     core.debug(`File Size: ${archiveFileSize}`)
 
+    // check useLocalCache
+    if (options.useLocalCache) {
+      await saveCacheLocal(archivePath, options)
+      cacheId = 0
+      return cacheId
+    }
+
     // For GHES, this check will take place in ReserveCache API with enterprise file size limit
     if (archiveFileSize > CacheFileSizeLimit && !isGhes()) {
       throw new Error(
@@ -576,4 +612,15 @@ async function saveCacheV2(
   }
 
   return cacheId
+}
+
+async function saveCacheLocal(
+  archivePath: string,
+  localCacheOptions: LocalCacheOptions
+): Promise<void> {
+  const dist = await utils.getLocalCacheDirectory(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    localCacheOptions.localCacheDirectoryBasePath!
+  )
+  await io.mv(archivePath, dist, {force: true})
 }

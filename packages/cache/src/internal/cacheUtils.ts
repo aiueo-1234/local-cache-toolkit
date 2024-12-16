@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as glob from '@actions/glob'
 import * as io from '@actions/io'
+import * as ioUtil from '@actions/io/lib/io-util'
 import * as crypto from 'crypto'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -164,4 +165,17 @@ export function getRuntimeToken(): string {
     throw new Error('Unable to get the ACTIONS_RUNTIME_TOKEN env variable')
   }
   return token
+}
+
+export async function getLocalCacheDirectory(
+  localCacheDirectoryBasePath: string
+): Promise<string> {
+  const ret = path.join(
+    localCacheDirectoryBasePath,
+    process.env['GITHUB_REPOSITORY'] ?? ''
+  )
+  if (!(await ioUtil.exists(ret))) {
+    await io.mkdirP(ret)
+  }
+  return ret
 }
