@@ -413,7 +413,12 @@ async function saveCacheV1(
 
     // check useLocalCache
     if (options?.useLocalCache === true) {
-      await saveCacheLocal(archivePath, options)
+      const version = utils.getCacheVersion(
+        paths,
+        compressionMethod,
+        enableCrossOsArchive
+      )
+      await saveCacheLocal(archivePath, version, options)
       cacheId = 0
       return cacheId
     }
@@ -531,15 +536,12 @@ async function saveCacheV2(
     const archiveFileSize = utils.getArchiveFileSizeInBytes(archivePath)
     core.debug(`File Size: ${archiveFileSize}`)
 
-    // check useLocalCache
-    if (options.useLocalCache) {
-      await saveCacheLocal(archivePath, options)
-      cacheId = 0
-      return cacheId
-    }
-
     // For GHES, this check will take place in ReserveCache API with enterprise file size limit
-    if (archiveFileSize > CacheFileSizeLimit && !isGhes()) {
+    if (
+      archiveFileSize > CacheFileSizeLimit &&
+      !isGhes() &&
+      !options.useLocalCache
+    ) {
       throw new Error(
         `Cache size of ~${Math.round(
           archiveFileSize / (1024 * 1024)
@@ -556,6 +558,14 @@ async function saveCacheV2(
       compressionMethod,
       enableCrossOsArchive
     )
+
+    // check useLocalCache
+    if (options.useLocalCache) {
+      await saveCacheLocal(archivePath, version, options)
+      cacheId = 0
+      return cacheId
+    }
+
     const request: CreateCacheEntryRequest = {
       key,
       version
@@ -616,6 +626,7 @@ async function saveCacheV2(
 
 async function saveCacheLocal(
   archivePath: string,
+  version: string,
   localCacheOptions: LocalCacheOptions
 ): Promise<void> {
   const dist = await utils.getLocalCacheDirectory(
