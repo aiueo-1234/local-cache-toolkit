@@ -15,12 +15,6 @@ import {
   FinalizeCacheEntryUploadResponse,
   GetCacheEntryDownloadURLRequest,
   GetCacheEntryDownloadURLResponse,
-  DeleteCacheEntryRequest,
-  DeleteCacheEntryResponse,
-  ListCacheEntriesRequest,
-  ListCacheEntriesResponse,
-  LookupCacheEntryRequest,
-  LookupCacheEntryResponse,
 } from "./cache";
 
 //==================================//
@@ -46,15 +40,6 @@ export interface CacheServiceClient {
   GetCacheEntryDownloadURL(
     request: GetCacheEntryDownloadURLRequest
   ): Promise<GetCacheEntryDownloadURLResponse>;
-  DeleteCacheEntry(
-    request: DeleteCacheEntryRequest
-  ): Promise<DeleteCacheEntryResponse>;
-  ListCacheEntries(
-    request: ListCacheEntriesRequest
-  ): Promise<ListCacheEntriesResponse>;
-  LookupCacheEntry(
-    request: LookupCacheEntryRequest
-  ): Promise<LookupCacheEntryResponse>;
 }
 
 export class CacheServiceClientJSON implements CacheServiceClient {
@@ -64,9 +49,6 @@ export class CacheServiceClientJSON implements CacheServiceClient {
     this.CreateCacheEntry.bind(this);
     this.FinalizeCacheEntryUpload.bind(this);
     this.GetCacheEntryDownloadURL.bind(this);
-    this.DeleteCacheEntry.bind(this);
-    this.ListCacheEntries.bind(this);
-    this.LookupCacheEntry.bind(this);
   }
   CreateCacheEntry(
     request: CreateCacheEntryRequest
@@ -127,66 +109,6 @@ export class CacheServiceClientJSON implements CacheServiceClient {
       })
     );
   }
-
-  DeleteCacheEntry(
-    request: DeleteCacheEntryRequest
-  ): Promise<DeleteCacheEntryResponse> {
-    const data = DeleteCacheEntryRequest.toJson(request, {
-      useProtoFieldName: true,
-      emitDefaultValues: false,
-    });
-    const promise = this.rpc.request(
-      "github.actions.results.api.v1.CacheService",
-      "DeleteCacheEntry",
-      "application/json",
-      data as object
-    );
-    return promise.then((data) =>
-      DeleteCacheEntryResponse.fromJson(data as any, {
-        ignoreUnknownFields: true,
-      })
-    );
-  }
-
-  ListCacheEntries(
-    request: ListCacheEntriesRequest
-  ): Promise<ListCacheEntriesResponse> {
-    const data = ListCacheEntriesRequest.toJson(request, {
-      useProtoFieldName: true,
-      emitDefaultValues: false,
-    });
-    const promise = this.rpc.request(
-      "github.actions.results.api.v1.CacheService",
-      "ListCacheEntries",
-      "application/json",
-      data as object
-    );
-    return promise.then((data) =>
-      ListCacheEntriesResponse.fromJson(data as any, {
-        ignoreUnknownFields: true,
-      })
-    );
-  }
-
-  LookupCacheEntry(
-    request: LookupCacheEntryRequest
-  ): Promise<LookupCacheEntryResponse> {
-    const data = LookupCacheEntryRequest.toJson(request, {
-      useProtoFieldName: true,
-      emitDefaultValues: false,
-    });
-    const promise = this.rpc.request(
-      "github.actions.results.api.v1.CacheService",
-      "LookupCacheEntry",
-      "application/json",
-      data as object
-    );
-    return promise.then((data) =>
-      LookupCacheEntryResponse.fromJson(data as any, {
-        ignoreUnknownFields: true,
-      })
-    );
-  }
 }
 
 export class CacheServiceClientProtobuf implements CacheServiceClient {
@@ -196,9 +118,6 @@ export class CacheServiceClientProtobuf implements CacheServiceClient {
     this.CreateCacheEntry.bind(this);
     this.FinalizeCacheEntryUpload.bind(this);
     this.GetCacheEntryDownloadURL.bind(this);
-    this.DeleteCacheEntry.bind(this);
-    this.ListCacheEntries.bind(this);
-    this.LookupCacheEntry.bind(this);
   }
   CreateCacheEntry(
     request: CreateCacheEntryRequest
@@ -244,51 +163,6 @@ export class CacheServiceClientProtobuf implements CacheServiceClient {
       GetCacheEntryDownloadURLResponse.fromBinary(data as Uint8Array)
     );
   }
-
-  DeleteCacheEntry(
-    request: DeleteCacheEntryRequest
-  ): Promise<DeleteCacheEntryResponse> {
-    const data = DeleteCacheEntryRequest.toBinary(request);
-    const promise = this.rpc.request(
-      "github.actions.results.api.v1.CacheService",
-      "DeleteCacheEntry",
-      "application/protobuf",
-      data
-    );
-    return promise.then((data) =>
-      DeleteCacheEntryResponse.fromBinary(data as Uint8Array)
-    );
-  }
-
-  ListCacheEntries(
-    request: ListCacheEntriesRequest
-  ): Promise<ListCacheEntriesResponse> {
-    const data = ListCacheEntriesRequest.toBinary(request);
-    const promise = this.rpc.request(
-      "github.actions.results.api.v1.CacheService",
-      "ListCacheEntries",
-      "application/protobuf",
-      data
-    );
-    return promise.then((data) =>
-      ListCacheEntriesResponse.fromBinary(data as Uint8Array)
-    );
-  }
-
-  LookupCacheEntry(
-    request: LookupCacheEntryRequest
-  ): Promise<LookupCacheEntryResponse> {
-    const data = LookupCacheEntryRequest.toBinary(request);
-    const promise = this.rpc.request(
-      "github.actions.results.api.v1.CacheService",
-      "LookupCacheEntry",
-      "application/protobuf",
-      data
-    );
-    return promise.then((data) =>
-      LookupCacheEntryResponse.fromBinary(data as Uint8Array)
-    );
-  }
 }
 
 //==================================//
@@ -308,36 +182,18 @@ export interface CacheServiceTwirp<T extends TwirpContext = TwirpContext> {
     ctx: T,
     request: GetCacheEntryDownloadURLRequest
   ): Promise<GetCacheEntryDownloadURLResponse>;
-  DeleteCacheEntry(
-    ctx: T,
-    request: DeleteCacheEntryRequest
-  ): Promise<DeleteCacheEntryResponse>;
-  ListCacheEntries(
-    ctx: T,
-    request: ListCacheEntriesRequest
-  ): Promise<ListCacheEntriesResponse>;
-  LookupCacheEntry(
-    ctx: T,
-    request: LookupCacheEntryRequest
-  ): Promise<LookupCacheEntryResponse>;
 }
 
 export enum CacheServiceMethod {
   CreateCacheEntry = "CreateCacheEntry",
   FinalizeCacheEntryUpload = "FinalizeCacheEntryUpload",
   GetCacheEntryDownloadURL = "GetCacheEntryDownloadURL",
-  DeleteCacheEntry = "DeleteCacheEntry",
-  ListCacheEntries = "ListCacheEntries",
-  LookupCacheEntry = "LookupCacheEntry",
 }
 
 export const CacheServiceMethodList = [
   CacheServiceMethod.CreateCacheEntry,
   CacheServiceMethod.FinalizeCacheEntryUpload,
   CacheServiceMethod.GetCacheEntryDownloadURL,
-  CacheServiceMethod.DeleteCacheEntry,
-  CacheServiceMethod.ListCacheEntries,
-  CacheServiceMethod.LookupCacheEntry,
 ];
 
 export function createCacheServiceServer<T extends TwirpContext = TwirpContext>(
@@ -411,66 +267,6 @@ function matchCacheServiceRoute<T extends TwirpContext = TwirpContext>(
         ctx = { ...ctx, methodName: "GetCacheEntryDownloadURL" };
         await events.onMatch(ctx);
         return handleCacheServiceGetCacheEntryDownloadURLRequest(
-          ctx,
-          service,
-          data,
-          interceptors
-        );
-      };
-    case "DeleteCacheEntry":
-      return async (
-        ctx: T,
-        service: CacheServiceTwirp,
-        data: Buffer,
-        interceptors?: Interceptor<
-          T,
-          DeleteCacheEntryRequest,
-          DeleteCacheEntryResponse
-        >[]
-      ) => {
-        ctx = { ...ctx, methodName: "DeleteCacheEntry" };
-        await events.onMatch(ctx);
-        return handleCacheServiceDeleteCacheEntryRequest(
-          ctx,
-          service,
-          data,
-          interceptors
-        );
-      };
-    case "ListCacheEntries":
-      return async (
-        ctx: T,
-        service: CacheServiceTwirp,
-        data: Buffer,
-        interceptors?: Interceptor<
-          T,
-          ListCacheEntriesRequest,
-          ListCacheEntriesResponse
-        >[]
-      ) => {
-        ctx = { ...ctx, methodName: "ListCacheEntries" };
-        await events.onMatch(ctx);
-        return handleCacheServiceListCacheEntriesRequest(
-          ctx,
-          service,
-          data,
-          interceptors
-        );
-      };
-    case "LookupCacheEntry":
-      return async (
-        ctx: T,
-        service: CacheServiceTwirp,
-        data: Buffer,
-        interceptors?: Interceptor<
-          T,
-          LookupCacheEntryRequest,
-          LookupCacheEntryResponse
-        >[]
-      ) => {
-        ctx = { ...ctx, methodName: "LookupCacheEntry" };
-        await events.onMatch(ctx);
-        return handleCacheServiceLookupCacheEntryRequest(
           ctx,
           service,
           data,
@@ -572,105 +368,6 @@ function handleCacheServiceGetCacheEntryDownloadURLRequest<
       );
     case TwirpContentType.Protobuf:
       return handleCacheServiceGetCacheEntryDownloadURLProtobuf<T>(
-        ctx,
-        service,
-        data,
-        interceptors
-      );
-    default:
-      const msg = "unexpected Content-Type";
-      throw new TwirpError(TwirpErrorCode.BadRoute, msg);
-  }
-}
-
-function handleCacheServiceDeleteCacheEntryRequest<
-  T extends TwirpContext = TwirpContext
->(
-  ctx: T,
-  service: CacheServiceTwirp,
-  data: Buffer,
-  interceptors?: Interceptor<
-    T,
-    DeleteCacheEntryRequest,
-    DeleteCacheEntryResponse
-  >[]
-): Promise<string | Uint8Array> {
-  switch (ctx.contentType) {
-    case TwirpContentType.JSON:
-      return handleCacheServiceDeleteCacheEntryJSON<T>(
-        ctx,
-        service,
-        data,
-        interceptors
-      );
-    case TwirpContentType.Protobuf:
-      return handleCacheServiceDeleteCacheEntryProtobuf<T>(
-        ctx,
-        service,
-        data,
-        interceptors
-      );
-    default:
-      const msg = "unexpected Content-Type";
-      throw new TwirpError(TwirpErrorCode.BadRoute, msg);
-  }
-}
-
-function handleCacheServiceListCacheEntriesRequest<
-  T extends TwirpContext = TwirpContext
->(
-  ctx: T,
-  service: CacheServiceTwirp,
-  data: Buffer,
-  interceptors?: Interceptor<
-    T,
-    ListCacheEntriesRequest,
-    ListCacheEntriesResponse
-  >[]
-): Promise<string | Uint8Array> {
-  switch (ctx.contentType) {
-    case TwirpContentType.JSON:
-      return handleCacheServiceListCacheEntriesJSON<T>(
-        ctx,
-        service,
-        data,
-        interceptors
-      );
-    case TwirpContentType.Protobuf:
-      return handleCacheServiceListCacheEntriesProtobuf<T>(
-        ctx,
-        service,
-        data,
-        interceptors
-      );
-    default:
-      const msg = "unexpected Content-Type";
-      throw new TwirpError(TwirpErrorCode.BadRoute, msg);
-  }
-}
-
-function handleCacheServiceLookupCacheEntryRequest<
-  T extends TwirpContext = TwirpContext
->(
-  ctx: T,
-  service: CacheServiceTwirp,
-  data: Buffer,
-  interceptors?: Interceptor<
-    T,
-    LookupCacheEntryRequest,
-    LookupCacheEntryResponse
-  >[]
-): Promise<string | Uint8Array> {
-  switch (ctx.contentType) {
-    case TwirpContentType.JSON:
-      return handleCacheServiceLookupCacheEntryJSON<T>(
-        ctx,
-        service,
-        data,
-        interceptors
-      );
-    case TwirpContentType.Protobuf:
-      return handleCacheServiceLookupCacheEntryProtobuf<T>(
         ctx,
         service,
         data,
@@ -824,150 +521,6 @@ async function handleCacheServiceGetCacheEntryDownloadURLJSON<
     }) as string
   );
 }
-
-async function handleCacheServiceDeleteCacheEntryJSON<
-  T extends TwirpContext = TwirpContext
->(
-  ctx: T,
-  service: CacheServiceTwirp,
-  data: Buffer,
-  interceptors?: Interceptor<
-    T,
-    DeleteCacheEntryRequest,
-    DeleteCacheEntryResponse
-  >[]
-) {
-  let request: DeleteCacheEntryRequest;
-  let response: DeleteCacheEntryResponse;
-
-  try {
-    const body = JSON.parse(data.toString() || "{}");
-    request = DeleteCacheEntryRequest.fromJson(body, {
-      ignoreUnknownFields: true,
-    });
-  } catch (e) {
-    if (e instanceof Error) {
-      const msg = "the json request could not be decoded";
-      throw new TwirpError(TwirpErrorCode.Malformed, msg).withCause(e, true);
-    }
-  }
-
-  if (interceptors && interceptors.length > 0) {
-    const interceptor = chainInterceptors(...interceptors) as Interceptor<
-      T,
-      DeleteCacheEntryRequest,
-      DeleteCacheEntryResponse
-    >;
-    response = await interceptor(ctx, request!, (ctx, inputReq) => {
-      return service.DeleteCacheEntry(ctx, inputReq);
-    });
-  } else {
-    response = await service.DeleteCacheEntry(ctx, request!);
-  }
-
-  return JSON.stringify(
-    DeleteCacheEntryResponse.toJson(response, {
-      useProtoFieldName: true,
-      emitDefaultValues: false,
-    }) as string
-  );
-}
-
-async function handleCacheServiceListCacheEntriesJSON<
-  T extends TwirpContext = TwirpContext
->(
-  ctx: T,
-  service: CacheServiceTwirp,
-  data: Buffer,
-  interceptors?: Interceptor<
-    T,
-    ListCacheEntriesRequest,
-    ListCacheEntriesResponse
-  >[]
-) {
-  let request: ListCacheEntriesRequest;
-  let response: ListCacheEntriesResponse;
-
-  try {
-    const body = JSON.parse(data.toString() || "{}");
-    request = ListCacheEntriesRequest.fromJson(body, {
-      ignoreUnknownFields: true,
-    });
-  } catch (e) {
-    if (e instanceof Error) {
-      const msg = "the json request could not be decoded";
-      throw new TwirpError(TwirpErrorCode.Malformed, msg).withCause(e, true);
-    }
-  }
-
-  if (interceptors && interceptors.length > 0) {
-    const interceptor = chainInterceptors(...interceptors) as Interceptor<
-      T,
-      ListCacheEntriesRequest,
-      ListCacheEntriesResponse
-    >;
-    response = await interceptor(ctx, request!, (ctx, inputReq) => {
-      return service.ListCacheEntries(ctx, inputReq);
-    });
-  } else {
-    response = await service.ListCacheEntries(ctx, request!);
-  }
-
-  return JSON.stringify(
-    ListCacheEntriesResponse.toJson(response, {
-      useProtoFieldName: true,
-      emitDefaultValues: false,
-    }) as string
-  );
-}
-
-async function handleCacheServiceLookupCacheEntryJSON<
-  T extends TwirpContext = TwirpContext
->(
-  ctx: T,
-  service: CacheServiceTwirp,
-  data: Buffer,
-  interceptors?: Interceptor<
-    T,
-    LookupCacheEntryRequest,
-    LookupCacheEntryResponse
-  >[]
-) {
-  let request: LookupCacheEntryRequest;
-  let response: LookupCacheEntryResponse;
-
-  try {
-    const body = JSON.parse(data.toString() || "{}");
-    request = LookupCacheEntryRequest.fromJson(body, {
-      ignoreUnknownFields: true,
-    });
-  } catch (e) {
-    if (e instanceof Error) {
-      const msg = "the json request could not be decoded";
-      throw new TwirpError(TwirpErrorCode.Malformed, msg).withCause(e, true);
-    }
-  }
-
-  if (interceptors && interceptors.length > 0) {
-    const interceptor = chainInterceptors(...interceptors) as Interceptor<
-      T,
-      LookupCacheEntryRequest,
-      LookupCacheEntryResponse
-    >;
-    response = await interceptor(ctx, request!, (ctx, inputReq) => {
-      return service.LookupCacheEntry(ctx, inputReq);
-    });
-  } else {
-    response = await service.LookupCacheEntry(ctx, request!);
-  }
-
-  return JSON.stringify(
-    LookupCacheEntryResponse.toJson(response, {
-      useProtoFieldName: true,
-      emitDefaultValues: false,
-    }) as string
-  );
-}
 async function handleCacheServiceCreateCacheEntryProtobuf<
   T extends TwirpContext = TwirpContext
 >(
@@ -1086,124 +639,4 @@ async function handleCacheServiceGetCacheEntryDownloadURLProtobuf<
   }
 
   return Buffer.from(GetCacheEntryDownloadURLResponse.toBinary(response));
-}
-
-async function handleCacheServiceDeleteCacheEntryProtobuf<
-  T extends TwirpContext = TwirpContext
->(
-  ctx: T,
-  service: CacheServiceTwirp,
-  data: Buffer,
-  interceptors?: Interceptor<
-    T,
-    DeleteCacheEntryRequest,
-    DeleteCacheEntryResponse
-  >[]
-) {
-  let request: DeleteCacheEntryRequest;
-  let response: DeleteCacheEntryResponse;
-
-  try {
-    request = DeleteCacheEntryRequest.fromBinary(data);
-  } catch (e) {
-    if (e instanceof Error) {
-      const msg = "the protobuf request could not be decoded";
-      throw new TwirpError(TwirpErrorCode.Malformed, msg).withCause(e, true);
-    }
-  }
-
-  if (interceptors && interceptors.length > 0) {
-    const interceptor = chainInterceptors(...interceptors) as Interceptor<
-      T,
-      DeleteCacheEntryRequest,
-      DeleteCacheEntryResponse
-    >;
-    response = await interceptor(ctx, request!, (ctx, inputReq) => {
-      return service.DeleteCacheEntry(ctx, inputReq);
-    });
-  } else {
-    response = await service.DeleteCacheEntry(ctx, request!);
-  }
-
-  return Buffer.from(DeleteCacheEntryResponse.toBinary(response));
-}
-
-async function handleCacheServiceListCacheEntriesProtobuf<
-  T extends TwirpContext = TwirpContext
->(
-  ctx: T,
-  service: CacheServiceTwirp,
-  data: Buffer,
-  interceptors?: Interceptor<
-    T,
-    ListCacheEntriesRequest,
-    ListCacheEntriesResponse
-  >[]
-) {
-  let request: ListCacheEntriesRequest;
-  let response: ListCacheEntriesResponse;
-
-  try {
-    request = ListCacheEntriesRequest.fromBinary(data);
-  } catch (e) {
-    if (e instanceof Error) {
-      const msg = "the protobuf request could not be decoded";
-      throw new TwirpError(TwirpErrorCode.Malformed, msg).withCause(e, true);
-    }
-  }
-
-  if (interceptors && interceptors.length > 0) {
-    const interceptor = chainInterceptors(...interceptors) as Interceptor<
-      T,
-      ListCacheEntriesRequest,
-      ListCacheEntriesResponse
-    >;
-    response = await interceptor(ctx, request!, (ctx, inputReq) => {
-      return service.ListCacheEntries(ctx, inputReq);
-    });
-  } else {
-    response = await service.ListCacheEntries(ctx, request!);
-  }
-
-  return Buffer.from(ListCacheEntriesResponse.toBinary(response));
-}
-
-async function handleCacheServiceLookupCacheEntryProtobuf<
-  T extends TwirpContext = TwirpContext
->(
-  ctx: T,
-  service: CacheServiceTwirp,
-  data: Buffer,
-  interceptors?: Interceptor<
-    T,
-    LookupCacheEntryRequest,
-    LookupCacheEntryResponse
-  >[]
-) {
-  let request: LookupCacheEntryRequest;
-  let response: LookupCacheEntryResponse;
-
-  try {
-    request = LookupCacheEntryRequest.fromBinary(data);
-  } catch (e) {
-    if (e instanceof Error) {
-      const msg = "the protobuf request could not be decoded";
-      throw new TwirpError(TwirpErrorCode.Malformed, msg).withCause(e, true);
-    }
-  }
-
-  if (interceptors && interceptors.length > 0) {
-    const interceptor = chainInterceptors(...interceptors) as Interceptor<
-      T,
-      LookupCacheEntryRequest,
-      LookupCacheEntryResponse
-    >;
-    response = await interceptor(ctx, request!, (ctx, inputReq) => {
-      return service.LookupCacheEntry(ctx, inputReq);
-    });
-  } else {
-    response = await service.LookupCacheEntry(ctx, request!);
-  }
-
-  return Buffer.from(LookupCacheEntryResponse.toBinary(response));
 }
