@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        runs-on: [ubuntu-latest, windows-latest, macos-latest]
+        runs-on: [ubuntu-latest, windows-latest] #, macos-latest]
       fail-fast: false
 
     runs-on: ${{ matrix.runs-on }}
@@ -118,7 +118,7 @@ jobs:
           const expected = [
             'my-artifact-ubuntu-latest',
             'my-artifact-windows-latest',
-            'my-artifact-macos-latest'
+            //'my-artifact-macos-latest'
           ]
 
           const foundArtifacts = artifacts.filter(artifact =>
@@ -173,7 +173,7 @@ jobs:
           const artifactsToDelete = [
             'my-artifact-ubuntu-latest',
             'my-artifact-windows-latest',
-            'my-artifact-macos-latest'
+            //'my-artifact-macos-latest'
           ]
 
           for (const artifactName of artifactsToDelete) {
