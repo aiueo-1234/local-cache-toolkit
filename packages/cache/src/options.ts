@@ -28,14 +28,6 @@ export interface UploadOptions extends LocalCacheOptions {
    */
   useAzureSdk?: boolean
   /**
-   * Indicates whether to use the Azure Blob SDK to download caches
-   * that are stored on Azure Blob Storage to improve reliability and
-   * performance
-   *
-   * @default false
-   */
-  useAzureSdk?: boolean
-  /**
    * Number of parallel cache upload
    *
    * @default 4
