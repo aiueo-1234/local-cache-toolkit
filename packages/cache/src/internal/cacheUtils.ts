@@ -165,17 +165,3 @@ export function getRuntimeToken(): string {
   }
   return token
 }
-
-export function getLocalCacheDirectory(
-  localCacheDirectoryBasePath: string,
-  key: string,
-  version: string
-): string {
-  const ret = path.join(
-    localCacheDirectoryBasePath,
-    process.env['GITHUB_REPOSITORY'] ?? '',
-    key,
-    version
-  )
-  return ret
-}

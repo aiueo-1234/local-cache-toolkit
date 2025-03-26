@@ -1,32 +1,9 @@
 import * as core from '@actions/core'
 
-export interface LocalCacheOptions {
-  /**
-   * Use cache which is saved at self-hosted runner
-   *
-   * @default false
-   */
-  useLocalCache?: boolean
-  /**
-   * Cache base directory of self-hosted runner
-   *
-   * @default undefined
-   */
-  localCacheDirectoryBasePath?: string
-}
-
 /**
  * Options to control cache upload
  */
-export interface UploadOptions extends LocalCacheOptions {
-  /**
-   * Indicates whether to use the Azure Blob SDK to download caches
-   * that are stored on Azure Blob Storage to improve reliability and
-   * performance
-   *
-   * @default false
-   */
-  useAzureSdk?: boolean
+export interface UploadOptions {
   /**
    * Number of parallel cache upload
    *
@@ -48,7 +25,7 @@ export interface UploadOptions extends LocalCacheOptions {
 /**
  * Options to control cache download
  */
-export interface DownloadOptions extends LocalCacheOptions {
+export interface DownloadOptions {
   /**
    * Indicates whether to use the Azure Blob SDK to download caches
    * that are stored on Azure Blob Storage to improve reliability and
@@ -107,8 +84,7 @@ export function getUploadOptions(copy?: UploadOptions): UploadOptions {
   const result: UploadOptions = {
     useAzureSdk: false,
     uploadConcurrency: 4,
-    uploadChunkSize: 32 * 1024 * 1024,
-    useLocalCache: false
+    uploadChunkSize: 32 * 1024 * 1024
   }
 
   if (copy) {
@@ -122,14 +98,6 @@ export function getUploadOptions(copy?: UploadOptions): UploadOptions {
 
     if (typeof copy.uploadChunkSize === 'number') {
       result.uploadChunkSize = copy.uploadChunkSize
-    }
-
-    if (typeof copy.useLocalCache == 'boolean') {
-      result.useLocalCache = copy.useLocalCache
-    }
-
-    if (typeof copy.localCacheDirectoryBasePath === 'string') {
-      result.localCacheDirectoryBasePath = copy.localCacheDirectoryBasePath
     }
   }
 
@@ -171,8 +139,7 @@ export function getDownloadOptions(copy?: DownloadOptions): DownloadOptions {
     downloadConcurrency: 8,
     timeoutInMs: 30000,
     segmentTimeoutInMs: 600000,
-    lookupOnly: false,
-    useLocalCache: false
+    lookupOnly: false
   }
 
   if (copy) {
@@ -198,14 +165,6 @@ export function getDownloadOptions(copy?: DownloadOptions): DownloadOptions {
 
     if (typeof copy.lookupOnly === 'boolean') {
       result.lookupOnly = copy.lookupOnly
-    }
-
-    if (typeof copy.useLocalCache == 'boolean') {
-      result.useLocalCache = copy.useLocalCache
-    }
-
-    if (typeof copy.localCacheDirectoryBasePath === 'string') {
-      result.localCacheDirectoryBasePath = copy.localCacheDirectoryBasePath
     }
   }
   const segmentDownloadTimeoutMins =
