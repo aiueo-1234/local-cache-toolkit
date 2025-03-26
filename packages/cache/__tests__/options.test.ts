@@ -11,6 +11,7 @@ const downloadConcurrency = 8
 const timeoutInMs = 30000
 const segmentTimeoutInMs = 600000
 const lookupOnly = false
+const useLocalCache = false
 
 test('getDownloadOptions sets defaults', async () => {
   const actualOptions = getDownloadOptions()
@@ -21,7 +22,8 @@ test('getDownloadOptions sets defaults', async () => {
     downloadConcurrency,
     timeoutInMs,
     segmentTimeoutInMs,
-    lookupOnly
+    lookupOnly,
+    useLocalCache
   })
 })
 
@@ -32,7 +34,8 @@ test('getDownloadOptions overrides all settings', async () => {
     downloadConcurrency: 14,
     timeoutInMs: 20000,
     segmentTimeoutInMs: 3600000,
-    lookupOnly: true
+    lookupOnly: true,
+    useLocalCache: false
   }
 
   const actualOptions = getDownloadOptions(expectedOptions)
@@ -44,10 +47,10 @@ test('getUploadOptions sets defaults', async () => {
   const expectedOptions: UploadOptions = {
     uploadConcurrency: 4,
     uploadChunkSize: 32 * 1024 * 1024,
+    useLocalCache: false,
     useAzureSdk: false
   }
   const actualOptions = getUploadOptions()
-
   expect(actualOptions).toEqual(expectedOptions)
 })
 
@@ -55,6 +58,7 @@ test('getUploadOptions overrides all settings', async () => {
   const expectedOptions: UploadOptions = {
     uploadConcurrency: 2,
     uploadChunkSize: 16 * 1024 * 1024,
+    useLocalCache: false,
     useAzureSdk: true
   }
 
@@ -67,7 +71,8 @@ test('env variables override all getUploadOptions settings', async () => {
   const expectedOptions: UploadOptions = {
     uploadConcurrency: 16,
     uploadChunkSize: 64 * 1024 * 1024,
-    useAzureSdk: true
+    useAzureSdk: true,
+    useLocalCache: false
   }
 
   process.env.CACHE_UPLOAD_CONCURRENCY = '16'
@@ -81,7 +86,8 @@ test('env variables override all getUploadOptions settings but do not exceed cap
   const expectedOptions: UploadOptions = {
     uploadConcurrency: 32,
     uploadChunkSize: 128 * 1024 * 1024,
-    useAzureSdk: true
+    useAzureSdk: true,
+    useLocalCache: false
   }
 
   process.env.CACHE_UPLOAD_CONCURRENCY = '64'
